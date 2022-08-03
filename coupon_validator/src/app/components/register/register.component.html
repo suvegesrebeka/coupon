@@ -1,0 +1,30 @@
+<!-- [readonly]="true" nem allitottam be mert nem tudtam atadni a kodfeltoltos valuet, viszont a regisztracios apihoz kitoroltem-->
+<!-- (messageEvent)="receiveMessage($event)" [value]="emailValue"   email fogadasara proba -->
+<div id="content">
+  <h1>Regisztráció</h1>
+  <form [formGroup]="registerform">
+    <label for="email">E-mail cím:</label>
+    <input id="email" name="email" [value]="emailVal" #emailVal (change)="setEmail(emailVal.value)"
+      formControlName="email" id="email" type="email"
+      required placeholder="barkamacska@example.com">
+    <label for="name">Teljes név:</label>
+    <input name="name" #nameVal (change)="setName(nameVal.value)" id="name" formControlName="name" type="text"
+      required />
+    <div *ngIf=" name!.invalid && (name!.dirty || name!.touched)">
+      <div [ngStyle]="{'color':'red'}" *ngIf="name!.errors?.['required']">
+        A név kötelező
+      </div>
+    </div>
+    <mat-checkbox #confirmed required class="example-margin">Elolvastam és elfogadom a játékszabályzatot!</mat-checkbox>
+    <div [ngStyle]="{'color':'red'}" *ngIf="!confirmed.checked">
+      Kötelező elfogadni
+    </div>
+  </form>
+  <button (click)="onSubmit()" [disabled]="(!registerform.valid||!confirmed.checked )" type="submit" mat-button
+    color="primary">Regisztráció</button>
+  <div *ngIf="summ == 1">
+    <p *ngIf="response" [ngStyle]="{'color':'green'}" id="win" #winner>Sikeres Regisztráció</p>
+    <p *ngIf="!response" [ngStyle]="{'color':'red'}" id="win" #winner>Nem sikerült regisztrálni, hibás adatokat adott
+      meg</p>
+  </div>
+</div>

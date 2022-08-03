@@ -1,0 +1,84 @@
+<div id="content">
+  <h1>Kódfeltöltés</h1>
+  <form [formGroup]="profileform" #login="ngForm" (ngSubmit)="onSubmit(login.value)">
+    <label for="email">E-mail cím:</label>
+    <input id="email" #box (keyup)="getValue(box.value)" formControlName="email" type="email" required [email]="true"
+      placeholder="suvegesrebeka@example.com">
+    <div *ngIf=" email!.invalid && (email!.dirty || email!.touched)">
+      <div [ngStyle]="{'color':'red'}" *ngIf="email!.errors?.['required']">
+        Az email cím kötelező
+      </div>
+      <div [ngStyle]="{'color':'red'}" *ngIf="email!.errors?.['email']">
+        Helyes email címet adjon meg!
+      </div>
+    </div>
+    <label for="code">Kód:</label>
+    <input name="code" id="code" required type="text" placeholder="kód" minlength="8" maxlength="8"
+      formControlName="code" />
+    <div *ngIf=" code!.invalid && (code!.dirty || code!.touched)">
+      <div [ngStyle]="{'color':'red'}" *ngIf="code!.errors?.['required']">
+        A kód kötelező
+      </div>
+      <div [ngStyle]="{'color':'red'}" *ngIf="code!.errors?.['minlength']">
+        8 karakter hosszúságú!
+      </div>
+      <div [ngStyle]="{'color':'red'}" *ngIf="code!.errors?.['pattern']">
+        Hibás formmátum!
+      </div>
+    </div>
+    <p for="date">vásárlás dátuma:</p>
+    <div [ngStyle]="{'display':'inline'}">
+      <label for="">Nap:</label>
+      <div id="date">
+        <mat-form-field (click)="toggleDisplay()" class="example-full-width" appearance="fill">
+          <mat-label *ngIf="isShow">{{longMonth+ '   ' + dd}}</mat-label>
+          <input required formControlName="date" id="date" name="date" matInput [min]="minDate" [max]="maxDate"
+            [matDatepicker]="picker">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle (click)="toggleDisplay()" matSuffix [for]="picker">
+            <mat-icon (click)="toggleDisplay()" matDatepickerToggleIcon>ˇ</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div *ngIf=" date!.invalid && (date!.dirty || date!.touched)">
+      <div [ngStyle]="{'color':'red'}" *ngIf="date!.errors?.['required']">
+        A nap kiválasztása kötelező
+      </div>
+    </div>
+
+    <span>
+      <label for="dropdownOption1">Óra:</label>
+      <select #hour (change)="getHour(hour.value)" required id="dropdownOption1" name="hour" id="hour">
+        <option value="" disabled selected></option>
+        <option *ngFor='let i of counter(24) ;let in = index' [ngValue]="i">{{in}}</option>
+      </select>
+    </span>
+    <!--
+      form validationhoz formcontrolname nem mukodott <div *ngIf="hour!.invalid && (hour!.dirty || hour!.touched)">
+          <div [ngStyle]="{'color':'red'}" *ngIf="hour!.errors?.['required']">
+            Az óra kiválasztása kötelező
+          </div>
+          </div> -->
+    <span>
+      <label for="dropdownOption2">Perc:</label>
+      <select #minute (change)="getMinute(minute.value)" required name="minute" id="dropdownOption2" name="mins">
+        <option value="" disabled selected></option>
+        <option *ngFor='let i of counter(60) ;let in = index' [ngValue]="i">{{in}}</option>
+      </select>
+    </span>
+    <!-- form validationhoz formcontrolname nem mukodott
+       <div *ngIf="minute!.invalid && (minute!.dirty || minute!.touched)">
+          <div [ngStyle]="{'color':'red'}" *ngIf="minute!.errors?.['required']">
+            A perc kiválasztása kötelező
+          </div>
+          </div> -->
+    <button [disabled]="!profileform.valid" type="submit" mat-button color="primary">Kódfeltöltés</button>
+    <div *ngIf="summ == 1">
+      <p *ngIf="won" [ngStyle]="{'color':'green'}" id="win" #winner>Gratulálok, nyertél!</p>
+      <p *ngIf="!won" [ngStyle]="{'color':'red'}" id="win" #winner>Sajnos most nem nyertél!</p>
+    </div>
+
+  </form>
+</div>
